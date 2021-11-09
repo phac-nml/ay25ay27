@@ -1,0 +1,138 @@
+genes: ["ORF1a", "ORF1b", "S", "ORF3a", "M", "N"]
+use_nextalign: true
+run_pangolin: true
+conda_environment: "workflow/envs/nextstrain.yaml"
+
+# Canada data is updated and aligned daily, GISAID data is added weekly on Saturdays to save on alignment time
+inputs:
+  - name: "can"
+    metadata: "data/canada_metadata.tsv"
+    sequences: "data/canada_sequences.fasta"
+  - name: "worldwide"
+    metadata: "data/gisaid_metadata.tsv"
+    sequences: "data/gisaid_sequences.fasta"
+
+builds:
+  # Focus on specific lineage and equal numbers of international/CDN
+  twentyfive:
+    subsampling_scheme: halfandhalf
+    geographic_scale: country
+    region: North America
+    country: Canada
+    lineage:  [ 'AY.25' ]
+    exclude_div: ['NA']
+    title: "AY.25 Build"
+  # Focus on specific lineage and equal numbers of international/CDN from GISAID only
+  twentyfiveext:
+    subsampling_scheme: external
+    geographic_scale: country
+    region: North America
+    country: Canada
+    lineage:  [ 'AY.25' ]
+    exclude_div: ['Nunavut']
+    title: "AY.25 Build - GISAID Data Only"
+  # Focus on specific lineage and equal numbers of international/CDN
+  twentyseven:
+    subsampling_scheme: halfandhalf
+    geographic_scale: country
+    region: North America
+    country: Canada
+    lineage:  [ 'AY.27' ]
+    exclude_div: ['NA']
+    title: "AY.27 Build"
+  # Focus on specific lineage and equal numbers of international/CDN from GISAID only
+  twentysevenext:
+    subsampling_scheme: external
+    geographic_scale: country
+    region: North America
+    country: Canada
+    lineage:  [ 'AY.27' ]
+    exclude_div: ['Nunavut']
+    title: "AY.27 Build - GISAID Data Only"
+
+filter:
+  can:
+    exclude_where: "division='USA'"    
+
+subsampling:
+  halfandhalf:    
+    canlin: # Up to 7500 sequences from Internal Canadian sequences of chosen lineage
+      group_by: "country year month"
+      max_sequences: 7500
+      exclude: "--exclude-where 'can!=yes' 'division={exclude_div}'" # subset sequences from input `can`
+      query: --query "(pango_lineage == {lineage})"
+    nearbylin: # Sequences from Internal Canadian sequences proximal to canlin (normally these are erroroneously assigned lineages)
+      group_by: "country year month"
+      max_sequences: 100
+      sampling_scheme: "--probabilistic-sampling"      
+      exclude: "--exclude-where 'can!=yes' 'division={exclude_div}'" # subset sequences from input `can`
+      priorities:
+        type: "proximity"
+        focus: "canlin"  
+    canada_late: # Recent CDN GISAID sequences focused on above
+      group_by: "country year month"
+      max_sequences: 500
+      sampling_scheme: "--probabilistic-sampling"
+      exclude: "--exclude-where 'worldwide!=yes' 'country!=Canada' 'division={exclude_div}'" # subset sequences from input `can`
+      query: --query "(pango_lineage == {lineage})"
+      priorities:
+        type: "proximity"
+        focus: "canlin"  
+    global_late: # Contextual samples from the rest of the world
+      group_by: "country year month"
+      max_sequences: 7500
+      sampling_scheme: "--probabilistic-sampling"
+      exclude: "--exclude-where 'worldwide!=yes' 'country=Canada' 'division={exclude_div}'"
+      query: --query "(pango_lineage == {lineage})"
+      priorities:
+        type: "proximity"
+        focus: "canlin"
+    global: # Contextual samples from the rest of the world not focused on canlin but of lineage {lineage}
+      group_by: "country year month"
+      max_sequences: 500      
+      exclude: "--exclude-where 'worldwide!=yes' 'country=Canada' 'division={exclude_div}'"
+      query: --query "(pango_lineage == {lineage})"      
+  external:    
+    canlin: # Up to 7500 sequences from GISAID Canadian sequences of chosen lineage
+      group_by: "country year month"
+      max_sequences: 7500
+      exclude: "--exclude-where 'worldwide!=yes' 'division={exclude_div}' 'country!=Canada'" # subset sequences from input `can`
+      query: --query "(pango_lineage == {lineage})"
+    nearbylin: # Sequences from GISAID Canadian sequences proximal to canlin (normally these are erroroneously assigned lineages)
+      group_by: "country year month"
+      max_sequences: 100
+      sampling_scheme: "--probabilistic-sampling"      
+      exclude: "--exclude-where 'worldwide!=yes' 'division={exclude_div}'" # subset sequences from input `can`
+      priorities:
+        type: "proximity"
+        focus: "canlin"  
+    canada_late: # Recent CDN GISAID sequences focused on above
+      group_by: "country year month"
+      max_sequences: 500
+      sampling_scheme: "--probabilistic-sampling"
+      exclude: "--exclude-where 'worldwide!=yes' 'country!=Canada' 'division={exclude_div}'" # subset sequences from input `can`
+      query: --query "(pango_lineage == {lineage})"
+      priorities:
+        type: "proximity"
+        focus: "canlin"  
+    global_late: # Contextual samples from the rest of the world
+      group_by: "country year month"
+      max_sequences: 7500
+      sampling_scheme: "--probabilistic-sampling"
+      exclude: "--exclude-where 'worldwide!=yes' 'country=Canada' 'division={exclude_div}'"
+      query: --query "(pango_lineage == {lineage})"
+      priorities:
+        type: "proximity"
+        focus: "canlin"
+    global: # Contextual samples from the rest of the world not focused on canlin but of lineage {lineage}
+      group_by: "country year month"
+      max_sequences: 500      
+      exclude: "--exclude-where 'worldwide!=yes' 'country=Canada' 'division={exclude_div}'"
+      query: --query "(pango_lineage == {lineage})"      
+
+files:
+  auspice_config: "nml_profiles/internal/my_auspice_config.json"
+  description: "nml_profiles/internal/my_description.md"
+  colors: "nml_profiles/internal/colors.tsv"  
+
+skip_travel_history_adjustment: True
