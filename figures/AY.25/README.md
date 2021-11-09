@@ -7,7 +7,7 @@ The final figure was constructed in this notebook [2-mutation-ay25.ipynb](2-muta
 # 1. Copy data
 
 ```bash
-cp ../../twentysevenext/*.nwk .
+cp ../../twentyfiveext/*.nwk .
 
 # Replace this line to copy/link all GISAID sequences
 ln -s /path/to/gisaid_sequences.fasta input/
