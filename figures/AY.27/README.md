@@ -2,7 +2,7 @@
 
 This repository contains the code for the analysis of AY.27 to produce a phylogenetic tree alongside a heatmap of mutations using data from GISAID.
 
-The final figure is found in [2-mutation-ay27.ipynb][]
+The final figure is found in [2-mutation-ay27.ipynb](2-mutation-ay27.ipynb).
 
 # 1. Copy data
 
@@ -26,7 +26,7 @@ Run the following notebooks:
 conda activate gdi-nml-ay27
 ```
 
-* [1-extract-sequences.ipynb][]
+* [1-extract-sequences.ipynb](1-extract-sequences.ipynb)
 
 # 3. Build index
 
@@ -42,4 +42,4 @@ gdi --project-dir index/ --ncores 32 analysis --reference-file ../references/NC_
 
 Run the following notebook:
 
-* [2-mutation-ay27.ipynb][]
+* [2-mutation-ay27.ipynb](2-mutation-ay27.ipynb)

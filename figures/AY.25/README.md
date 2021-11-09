@@ -2,7 +2,7 @@
 
 This describes the analysis for constructing an AY.25 tree with a mutation heatmap. The analysis started from an Augur analysis directory containing a phylogenetic tree and metadata from GISAID.
 
-The final figure was constructed in this notebook [2-mutation-ay25.ipynb][].
+The final figure was constructed in this notebook [2-mutation-ay25.ipynb](2-mutation-ay25.ipynb).
 
 # 1. Copy data
 
@@ -26,7 +26,7 @@ Run the following notebooks:
 conda activate gdi-nml-ay27
 ```
 
-* [1-extract-sequences.ipynb][]
+* [1-extract-sequences.ipynb](1-extract-sequences.ipynb)
 
 # 3. Build index
 
@@ -42,4 +42,4 @@ gdi --project-dir index/ --ncores 32 analysis --reference-file ../references/NC_
 
 Run the following notebook:
 
-* [2-mutation-ay25.ipynb][]
+* [2-mutation-ay25.ipynb](2-mutation-ay25.ipynb)
