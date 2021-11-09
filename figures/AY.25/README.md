@@ -10,10 +10,10 @@ The final figure was constructed in this notebook [2-mutation-ay25.ipynb](2-muta
 cp ../../twentysevenext/*.nwk .
 
 # Replace this line to copy/link all GISAID sequences
-ln -s /Drives/P/Auspice/ncov/data/gisaid_sequences.fasta input/
+ln -s /path/to/gisaid_sequences.fasta input/
 
 # Replace these lines to copy/link to GISAID metadata (subsampled to only those found in the tree)
-cp /Drives/K/apetkau/workspace/nml-ay25-ay27-2021-11-05/twentyfiveext-2021-11-08/twentyfiveext_subsampled_metadata.tsv.xz input/
+cp ../..//twentyfiveext/twentyfiveext_subsampled_metadata.tsv.xz input/
 xz -d input/twentyfiveext_subsampled_metadata.tsv.xz
 gzip input/twentyfiveext_subsampled_metadata.tsv
 ```
