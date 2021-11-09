@@ -13,7 +13,7 @@ cp ../../twentysevenext/*.nwk .
 ln -s /path/to/gisaid_sequences.fasta input/
 
 # Replace these lines to copy/link to GISAID metadata (subsampled to only those found in the tree)
-cp ../..//twentyfiveext/twentyfiveext_subsampled_metadata.tsv.xz input/
+cp ../../twentyfiveext/twentyfiveext_subsampled_metadata.tsv.xz input/
 xz -d input/twentyfiveext_subsampled_metadata.tsv.xz
 gzip input/twentyfiveext_subsampled_metadata.tsv
 ```
